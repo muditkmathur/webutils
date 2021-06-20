@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="converter.css"> </link>
+  <script type='text/javascript' src='converter.js' />
+  </script>
+</head>
+<body onload="calculateValue()">
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>PER SQFT</td>
+        <td>PER SQMT</td>
+        <td>PER ACRE</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Enter the rate Rs.</td>
+        <td><input id="rate" type="number" value="30" onchange="calculateValue()" /></td>
+        <td>
+          <select id="rateUnit" onchange="calculateValue()">
+            <option>per sq. ft</option>
+            <option>per sq. meter</option>
+            <option>per acre</option>
+          </select>
+        </td>
+        <td id="persqft"/>
+        <td id="persqmt"/>
+        <td id="perac"  />
+      </tr>
+      <tr>
+        <td>Enter the area</td>
+        <td><input id="area" type="number" value="6000" onchange="calculateValue()" /></td>
+        <td>
+          <select id="area_unit" onchange="calculateValue()">
+            <option>sq. ft</option>
+            <option>sq. meter</option>
+            <option>acre</option>
+          </select>
+        </td><td/><td/><td/>
+      </tr>
+      <tr>
+        <td>Value in Rs.:</td>
+        <td><div id="final_value">0</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</body>
+</html>
