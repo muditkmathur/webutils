@@ -6,36 +6,16 @@
   <script type='text/javascript' src='converter.js' />
   </script>
 </head>
-<body onload="calculateValue()">
+<body onload="calculateRateFromAreaAndValue()">
   <table class="styled-table">
-    <thead>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>PER SQFT</td>
-        <td>PER SQMT</td>
-        <td>PER ACRE</td>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td>Enter the rate Rs.</td>
-        <td><input id="rate" type="number" value="30" onchange="calculateValue()" /></td>
-        <td>
-          <select id="rateUnit" onchange="calculateValue()">
-            <option>per sq. ft</option>
-            <option>per sq. meter</option>
-            <option>per acre</option>
-          </select>
-        </td>
-        <td id="persqft"/>
-        <td id="persqmt"/>
-        <td id="perac"  />
+        <td>Value in Rs.:</td>
+        <td><input id="final_value" value="3000000" onchange="calculateRateFromAreaAndValue()"></input></td>
       </tr>
       <tr>
         <td>Enter the area</td>
-        <td><input id="area" type="number" value="6000" onchange="calculateValue()" /></td>
+        <td><input id="area" type="number" value="1200" onchange="calculateRateFromAreaAndValue()" /></td>
         <td>
           <select id="area_unit" onchange="calculateValue()">
             <option>sq. ft</option>
@@ -44,9 +24,29 @@
           </select>
         </td><td/><td/><td/>
       </tr>
+    </tbody>
+    <tbody>
       <tr>
-        <td>Value in Rs.:</td>
-        <td><div id="final_value">0</div></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>PER SQFT</td>
+        <td>PER SQMT</td>
+        <td>PER ACRE</td>
+      </tr>
+      <tr>
+        <td>Enter the rate Rs.</td>
+        <td><input id="rate" type="number" value="2500" onchange="calculateRateFromAreaAndValue()" /></td>
+        <td>
+          <select id="rate_unit" onchange="calculateRateFromAreaAndValues()">
+            <option>per sq. ft</option>
+            <option>per sq. meter</option>
+            <option>per acre</option>
+          </select>
+        </td>
+        <td id="persqft"/>
+        <td id="persqmt"/>
+        <td id="perac"  />
       </tr>
     </tbody>
   </table>
