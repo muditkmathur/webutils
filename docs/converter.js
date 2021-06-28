@@ -28,7 +28,7 @@ function calculateRateInOtherDimentions() {
     ratePerSqAc=(rate * 43560);
   } else if (rateUnitSelected==1){ // sqmt to others
     ratePerSqFt=rate / 10.7639;
-    ratePerSqAc=rate * 4046.855 + " ("+ (rate * 4046.855) + "L)";
+    ratePerSqAc=rate * 4046.855;
   } else if (rateUnitSelected==2){ // acres to others
     ratePerSqFt=rate / 43560;
     ratePerSqMt=rate / 4046.855;
@@ -61,9 +61,9 @@ function calculateAreaInOtherDimentions() {
     areaSqMt*=4046.855;
   }
 
-  document.getElementById("sqft").innerHTML=areaSqFt;
-  document.getElementById("sqmt").innerHTML=areaSqMt;
-  document.getElementById("ac").innerHTML=areaAc;
+  document.getElementById("sqft").innerHTML=convertToRupeesFormat(areaSqFt);
+  document.getElementById("sqmt").innerHTML=convertToRupeesFormat(areaSqMt);
+  document.getElementById("ac").innerHTML=convertToRupeesFormat(areaAc);
 
 }
 
@@ -71,24 +71,22 @@ function calculateRateFromAreaAndValue() {
 
   const value = document.getElementById("final_value").value.replaceAll(',', '');
 
-  const areaSqFt=document.getElementById("sqft").innerHTML;
-  const areaSqMt=document.getElementById("sqmt").innerHTML;
-  const areaAc=document.getElementById("ac").innerHTML;
+  const areaSqFt=document.getElementById("sqft").innerHTML.replaceAll(',', '');
+  const areaSqMt=document.getElementById("sqmt").innerHTML.replaceAll(',', '');
+  const areaAc=document.getElementById("ac").innerHTML.replaceAll(',', '');
   
-  document.getElementById("persqft").innerHTML=value/areaSqFt;
-  document.getElementById("persqmt").innerHTML=value/areaSqMt;
-  document.getElementById("perac").innerHTML=value/areaAc;
+  document.getElementById("persqft").innerHTML=convertToRupeesFormat(value/areaSqFt);
+  document.getElementById("persqmt").innerHTML=convertToRupeesFormat(value/areaSqMt);
+  document.getElementById("perac").innerHTML=convertToRupeesFormat(value/areaAc);
 
-
-  const rateUnitSelected = document.getElementById("rate_unit").selectedIndex;
-  
   // calculate the values and set
+  const rateUnitSelected = document.getElementById("rate_unit").selectedIndex;
   if (rateUnitSelected==0){ // sqft to others
-    document.getElementById("rate").value = document.getElementById("persqft").innerHTML;
+    document.getElementById("rate").value = document.getElementById("persqft").innerHTML.replaceAll(',', '');
   } else if (rateUnitSelected==1){ // sqmt to others
-    document.getElementById("rate").value = document.getElementById("persqmt").innerHTML;
+    document.getElementById("rate").value = document.getElementById("persqmt").innerHTML.replaceAll(',', '');
   } else if (rateUnitSelected==2){ // acres to others
-    document.getElementById("rate").value = document.getElementById("perac").innerHTML;
+    document.getElementById("rate").value = document.getElementById("perac").innerHTML.replaceAll(',', '');
   }
 }
 
