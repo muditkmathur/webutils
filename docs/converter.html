@@ -6,26 +6,37 @@
   <script type='text/javascript' src='converter.js' />
   </script>
 </head>
-<body onload="calculateRateFromAreaAndValue()">
+<body onload="calculateTableValues()">
   <table class="styled-table">
     <tbody>
       <tr>
         <td>Value in Rs.:</td>
-        <td><input id="final_value" value="3000000" onchange="calculateRateFromAreaAndValue()"></input></td>
+        <td><input id="final_value" value="30,00,000" onchange="calculateTableValues()"></input></td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>SQFT</td>
+        <td>SQMT</td>
+        <td>ACRE</td>
       </tr>
       <tr>
         <td>Enter the area</td>
-        <td><input id="area" type="number" value="1200" onchange="calculateRateFromAreaAndValue()" /></td>
+        <td><input id="area" type="number" value="1200" onchange="doAreaCalculations()" /></td>
         <td>
-          <select id="area_unit" onchange="calculateValue()">
+          <select id="area_unit" onchange="doAreaCalculations()">
             <option>sq. ft</option>
             <option>sq. meter</option>
             <option>acre</option>
           </select>
-        </td><td/><td/><td/>
+        </td>
+        <td id="sqft"/>
+        <td id="sqmt"/>
+        <td id="ac"  />
       </tr>
-    </tbody>
-    <tbody>
       <tr>
         <td></td>
         <td></td>
@@ -35,10 +46,12 @@
         <td>PER ACRE</td>
       </tr>
       <tr>
-        <td>Enter the rate Rs.</td>
-        <td><input id="rate" type="number" value="2500" onchange="calculateRateFromAreaAndValue()" /></td>
+        <td>Enter the rate Rs. <br />
+          (Constant Rate <input id="constant_rate" type="checkbox" />)
+        </td>
+        <td><input id="rate" type="number" value="2500" onchange="doRateCalculations()" /></td>
         <td>
-          <select id="rate_unit" onchange="calculateRateFromAreaAndValues()">
+          <select id="rate_unit" onchange="doRateCalculations()">
             <option>per sq. ft</option>
             <option>per sq. meter</option>
             <option>per acre</option>

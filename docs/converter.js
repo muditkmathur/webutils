@@ -1,40 +1,15 @@
-function calculateRateFromAreaAndValue() {
+function doRateCalculations(){
+  calculateRateInOtherDimentions();
+  calculateValue();
+}
 
-  const value = document.getElementById("final_value").value.replaceAll(',', '');
-  document.getElementById("final_value").value = convertToRupeesFormat(value);
-
-  const area = document.getElementById("area").value;
-  const areaUnitSelected = document.getElementById("area_unit").selectedIndex;
-  
-  var ratePerSqFt=value/area;
-  var ratePerSqMt=value/area;
-  var ratePerSqAc=value/area;
-
-  // calculate the values and set
-  if (areaUnitSelected==0){ // per sqft to others
-    ratePerSqMt /= 10.7639;
-    ratePerSqAc /= 43560;
-  } else if (areaUnitSelected==1){ // per sqmt to others
-    ratePerSqFt *= 10.7639;
-    ratePerSqAc *= 4046.855;
-  } else if (areaUnitSelected==2){ // per acres to others
-    ratePerSqFt /= 43560;
-    ratePerSqMt /= 4046.855;
-  }
-
-  document.getElementById("persqft").innerHTML=convertToRupeesFormat(ratePerSqFt);
-  document.getElementById("persqmt").innerHTML=convertToRupeesFormat(ratePerSqMt);
-  document.getElementById("perac").innerHTML=convertToRupeesFormat(ratePerSqAc);
-
-  const rateUnitSelected = document.getElementById("rate_unit").selectedIndex;
-
-  // calculate the values and set
-  if (rateUnitSelected==0){ // per sqft to others
-    document.getElementById("rate").value=document.getElementById("persqft").innerHTML.replaceAll(',', '');
-  } else if (rateUnitSelected==1){ // per sqmt to others
-    document.getElementById("rate").value=document.getElementById("persqmt").innerHTML.replaceAll(',', '');
-  } else if (rateUnitSelected==2){ // per acres to others
-    document.getElementById("rate").value=document.getElementById("perac").innerHTML.replaceAll(',', '');
+function doAreaCalculations(){
+  calculateAreaInOtherDimentions();
+  const isRateConstant = document.getElementById("constant_rate").checked;
+  if (isRateConstant===true){
+    calculateValue();
+  } else {
+    calculateRateFromAreaAndValue()
   }
 }
 
@@ -65,9 +40,60 @@ function calculateRateInOtherDimentions() {
 
 }
 
-function calculateValue() {
+function calculateAreaInOtherDimentions() {
+
+  const area = document.getElementById("area").value;
+  const areaUnitSelected = document.getElementById("area_unit").selectedIndex;
   
-  calculateRateInOtherDimentions();
+  var areaSqFt=area;
+  var areaSqMt=area;
+  var areaAc=area;
+
+  // calculate the values and set
+  if (areaUnitSelected==0){ // sqft to others
+    areaSqMt/= 10.7639;
+    areaAc/= 43560;
+  } else if (areaUnitSelected==1){ // sqmt to others
+    areaSqFt*= 10.7639;
+    areaAc/=4046.855;
+  } else if (areaUnitSelected==2){ // acres to others
+    areaSqFt*=43560;
+    areaSqMt*=4046.855;
+  }
+
+  document.getElementById("sqft").innerHTML=areaSqFt;
+  document.getElementById("sqmt").innerHTML=areaSqMt;
+  document.getElementById("ac").innerHTML=areaAc;
+
+}
+
+function calculateRateFromAreaAndValue() {
+
+  const value = document.getElementById("final_value").value.replaceAll(',', '');
+
+  const areaSqFt=document.getElementById("sqft").innerHTML;
+  const areaSqMt=document.getElementById("sqmt").innerHTML;
+  const areaAc=document.getElementById("ac").innerHTML;
+  
+  document.getElementById("persqft").innerHTML=value/areaSqFt;
+  document.getElementById("persqmt").innerHTML=value/areaSqMt;
+  document.getElementById("perac").innerHTML=value/areaAc;
+
+
+  const rateUnitSelected = document.getElementById("rate_unit").selectedIndex;
+  
+  // calculate the values and set
+  if (rateUnitSelected==0){ // sqft to others
+    document.getElementById("rate").value = document.getElementById("persqft").innerHTML;
+  } else if (rateUnitSelected==1){ // sqmt to others
+    document.getElementById("rate").value = document.getElementById("persqmt").innerHTML;
+  } else if (rateUnitSelected==2){ // acres to others
+    document.getElementById("rate").value = document.getElementById("perac").innerHTML;
+  }
+}
+
+function calculateValue() {
+
   const rateUnitSelected = document.getElementById("rate_unit").selectedIndex;
   const rate = document.getElementById("rate").value;
   const areaUnitSelected = document.getElementById("area_unit").selectedIndex;
@@ -107,6 +133,11 @@ function calculateValue() {
   }
   
   document.getElementById("final_value").value=convertToRupeesFormat(finalValue);
+}
+
+function calculateTableValues(){
+  calculateAreaInOtherDimentions();
+  calculateRateFromAreaAndValue();
 }
 
 function convertToRupeesFormat(value){
