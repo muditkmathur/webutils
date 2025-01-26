@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhatsApp Message Sender</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+      button {
+        background-color: #25d366;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>WhatsApp Message Sender</h1>
+      <input
+        type="tel"
+        id="phoneNumber"
+        placeholder="Enter phone number (e.g., +1234567890)"
+      />
+      <input type="file" id="pdfFile" accept=".pdf" />
+      <button id="sendButton" disabled>Send via WhatsApp</button>
+      <p id="status"></p>
+    </div>
+
+    <script>
+      const phoneInput = document.getElementById("phoneNumber");
+      const pdfInput = document.getElementById("pdfFile");
+      const sendButton = document.getElementById("sendButton");
+      const statusText = document.getElementById("status");
+
+      function validateInputs() {
+        sendButton.disabled = !(phoneInput.value && pdfInput.files.length);
+      }
+
+      phoneInput.addEventListener("input", validateInputs);
+      pdfInput.addEventListener("change", validateInputs);
+
+      sendButton.addEventListener("click", () => {
+        const phoneNumber = phoneInput.value.replace(/[^\d]/g, "");
+        const pdfFile = pdfInput.files[0];
+
+        if (!phoneNumber || !pdfFile) {
+          statusText.textContent = "Please enter phone number and select PDF";
+          return;
+        }
+
+        const message = "Hello! I'm sharing an important document with you.";
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+          message
+        )}`;
+
+        // Try to open WhatsApp
+        window.location.href = whatsappUrl;
+
+        // Prepare PDF for download
+        const pdfUrl = URL.createObjectURL(pdfFile);
+        const downloadLink = document.createElement("a");
+        downloadLink.href = pdfUrl;
+        downloadLink.download = pdfFile.name;
+        downloadLink.click();
+
+        statusText.textContent = "Opening WhatsApp...";
+      });
+    </script>
+  </body>
+</html>
