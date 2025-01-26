@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WhatsApp Message Sender</title>
+    <title>WhatsApp Link Generator</title>
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -33,63 +33,73 @@
         border: none;
         cursor: pointer;
       }
-      button:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
+      .loading {
+        display: none;
+        margin: 10px 0;
+        text-align: center;
+        color: #666;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>WhatsApp Message Sender</h1>
+      <h1>WhatsApp Link Generator</h1>
       <input
         type="tel"
         id="phoneNumber"
         placeholder="Enter phone number (e.g., +1234567890)"
       />
-      <input type="file" id="pdfFile" accept=".pdf" />
-      <button id="sendButton" disabled>Send via WhatsApp</button>
-      <p id="status"></p>
+      <button id="sendButton">Open WhatsApp</button>
+      <div id="loading" class="loading">Preparing message...</div>
     </div>
 
     <script>
       const phoneInput = document.getElementById("phoneNumber");
-      const pdfInput = document.getElementById("pdfFile");
       const sendButton = document.getElementById("sendButton");
-      const statusText = document.getElementById("status");
+      const loadingDiv = document.getElementById("loading");
 
-      function validateInputs() {
-        sendButton.disabled = !(phoneInput.value && pdfInput.files.length);
+      async function downloadPDF() {
+        try {
+          // Use the direct URL to the PDF on your website
+          const directUrl =
+            "https://muditkmathur.github.io/webutils/muscle-fit-services.pdf";
+          return directUrl;
+        } catch (error) {
+          console.error("Error with PDF link:", error);
+          return null;
+        }
       }
 
-      phoneInput.addEventListener("input", validateInputs);
-      pdfInput.addEventListener("change", validateInputs);
-
-      sendButton.addEventListener("click", () => {
+      sendButton.addEventListener("click", async () => {
         const phoneNumber = phoneInput.value.replace(/[^\d]/g, "");
-        const pdfFile = pdfInput.files[0];
-
-        if (!phoneNumber || !pdfFile) {
-          statusText.textContent = "Please enter phone number and select PDF";
+        if (!phoneNumber) {
+          alert("Please enter a phone number");
           return;
         }
 
-        const message = "Hello! I'm sharing an important document with you.";
-        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-          message
-        )}`;
+        loadingDiv.style.display = "block";
+        sendButton.disabled = true;
 
-        // Try to open WhatsApp
-        window.location.href = whatsappUrl;
+        try {
+          const pdfUrl = await downloadPDF();
+          if (!pdfUrl) {
+            throw new Error("Failed to prepare the PDF");
+          }
 
-        // Prepare PDF for download
-        const pdfUrl = URL.createObjectURL(pdfFile);
-        const downloadLink = document.createElement("a");
-        downloadLink.href = pdfUrl;
-        downloadLink.download = pdfFile.name;
-        downloadLink.click();
-
-        statusText.textContent = "Opening WhatsApp...";
+          const message =
+            "Thanks for reaching out. Please find our service card here: " +
+            pdfUrl;
+          window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+            message
+          )}`;
+        } catch (error) {
+          alert(
+            "Sorry, there was an error preparing the message. Please try again."
+          );
+        } finally {
+          loadingDiv.style.display = "none";
+          sendButton.disabled = false;
+        }
       });
     </script>
   </body>
